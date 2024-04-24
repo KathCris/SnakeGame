@@ -1,5 +1,9 @@
+<script lang="ts">
+  import BoardGame from './components/BoardGame.vue';
+</script>
+
 <template>
   <div>
-    <NuxtWelcome />
+  <BoardGame />
   </div>
 </template>
