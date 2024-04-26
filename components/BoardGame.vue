@@ -7,6 +7,11 @@
       :style="{ backgroundColor: bgColorRefBoard }"
     />
   </div>
+  <div class="apple">
+    <div class="apple-body"></div>
+    <div class="apple-leaf"></div>
+    <div class="apple-stem"></div>
+  </div>
 </template>
 
 
@@ -19,7 +24,14 @@ export default{
       bgColorRefBoard: ref('green'),
       sizeSquares: 24,
       qtdSquares: 30,
-      snakeTrail: [],
+      snakeTrail: 0,
+      // snakeTrail: [],
+      snakeTrailX: 10,
+      snakeTrailY: 10,
+      AppleX: 10,
+      AppleY: 10,
+      speedX: 0,
+      speedY: 0,
     }
   },
   
@@ -38,8 +50,9 @@ export default{
   // Methods
   methods: {
     createBoard () {
-      const refBoard = this.$refs.board as HTMLCanvasElement;
-      const ctx = refBoard?.getContext('2d');
+      this.snakeTrail = 5
+      const refBoard = this.$refs.board as HTMLCanvasElement
+      const ctx = refBoard?.getContext('2d')
 
       if (ctx) {
         const size = this.sizeSquares;
@@ -47,21 +60,67 @@ export default{
 
         for (let row = 0; row < qtdSquares; row++) {
           for (let col = 0; col < qtdSquares; col++) {
-            const x = col * size;
-            const y = row * size;
+            const x = col * size
+            const y = row * size
 
             if ((row + col) % 2 === 0) {
-              ctx.fillStyle = '#92DC70'; // Light
+              ctx.fillStyle = '#92DC70' // Light
             } else {
-              ctx.fillStyle = '#85CB64'; // Dark
+              ctx.fillStyle = '#85CB64' // Dark
             }
 
-            ctx.fillRect(x, y, size, size);
+            ctx.fillRect(x, y, size, size)
           }
         }
+      }
+    },
+
+    processingGame () {
+      this.snakeTrailX = this.speedX
+      this.snakeTrailY = this.speedY
+
+      if(this.snakeTrailX < 0) {
+        // this.endGame()
       }
     }
   },
 };
 </script>
+
+
+<style scoped>
+.apple {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+.apple-body {
+  width: 100%;
+  height: 100%;
+  background: red;
+  border-radius: 50%;
+}
+
+.apple-leaf {
+  width: 30px;
+  height: 20px;
+  background: green;
+  border-radius: 50%;
+  position: absolute;
+  top: -10px;
+  left: 35px;
+  transform: rotate(-45deg);
+  z-index: 20;
+}
+
+.apple-stem {
+  width: 10px;
+  height: 20px;
+  background: brown;
+  position: absolute;
+  top: -20px;
+  left: 45px;
+}
+</style>
 
