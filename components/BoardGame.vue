@@ -1,11 +1,15 @@
 <template>
-  <div style="background-color: #7DC55C; height: 100vh; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center;">
-    <canvas
-      :width="600"
-      :height="600"
-      ref="board"
-      :style="{ backgroundColor: bgColorRefBoard }"
-    />
+  <div v-if="showButtonStart" class="containerButtonStart">
+    <button @click="startGame" class="buttonStart" type="button">Iniciar jogo</button>
+  </div>
+  <div v-if="showButtonStart" class="screenOpacity" />
+    <div class="configContainerCanvas">
+      <canvas
+        :width="600"
+        :height="600"
+        ref="board"
+        :style="{ backgroundColor: bgColorRefBoard }"
+      />
   </div>
   <!-- <div class="apple">
     <div class="apple-body"></div>
@@ -23,6 +27,7 @@ export default{
     return {
       numberRandomToApply: 1,
       numberRandomToSnake: 1, 
+      showButtonStart: true,
       context: null,
       bgColorRefBoard: ref('green'),
       sizeSquares: 24,
@@ -94,6 +99,9 @@ export default{
       }
     },
 
+    startGame () {
+      this.showButtonStart = false
+    },
 
 
     processingGame () {
@@ -110,6 +118,51 @@ export default{
 
 
 <style scoped>
+
+.buttonStart {
+  padding: 16px 32px;
+  font-size: larger;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  background-color: dodgerblue;
+}
+.buttonStart:hover{
+  background-color: rgb(25, 108, 190);
+  cursor: pointer;
+}
+
+.screenOpacity {
+  background-color: black; 
+  height: 100vh; 
+  width: 100%; 
+  position: absolute; 
+  z-index: 10; 
+  opacity: 0.6;
+}
+
+.configContainerCanvas {
+  position: relative; 
+  background-color: #7DC55C; 
+  height: 100vh; 
+  margin: 0; 
+  padding: 0; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+}
+
+.containerButtonStart{
+  width: 100%; 
+  display: flex; 
+  position: absolute; 
+  z-index: 20; 
+  justify-content: center; 
+  align-items: center; 
+  height: 100vh;
+}
+
+/*  */
 .apple {
   position: relative;
   width: 100px;
