@@ -7,11 +7,11 @@
       :style="{ backgroundColor: bgColorRefBoard }"
     />
   </div>
-  <div class="apple">
+  <!-- <div class="apple">
     <div class="apple-body"></div>
     <div class="apple-leaf"></div>
     <div class="apple-stem"></div>
-  </div>
+  </div> -->
 </template>
 
 
@@ -21,13 +21,16 @@
 export default{
   data() {
     return {
+      numberRandomToApply: 1,
+      numberRandomToSnake: 1, 
+      context: null,
       bgColorRefBoard: ref('green'),
       sizeSquares: 24,
       qtdSquares: 30,
       snakeTrail: 0,
       // snakeTrail: [],
-      snakeTrailX: 10,
-      snakeTrailY: 10,
+      snakeTrailX: 15,
+      snakeTrailY: 15,
       AppleX: 10,
       AppleY: 10,
       speedX: 0,
@@ -44,6 +47,9 @@ export default{
 
   created() {
     console.log('Component has been created')
+
+    this.numberRandomToApply = Math.floor(Math.random() * (20 - 1 + 1)) + 1
+    this.numberRandomToSnake = Math.floor(Math.random() * (20 - 1 + 1)) + 1
   },
 
 
@@ -52,9 +58,9 @@ export default{
     createBoard () {
       this.snakeTrail = 5
       const refBoard = this.$refs.board as HTMLCanvasElement
-      const ctx = refBoard?.getContext('2d')
+      const context = refBoard?.getContext('2d')
 
-      if (ctx) {
+      if (context) {
         const size = this.sizeSquares;
         const qtdSquares = this.qtdSquares;
 
@@ -64,16 +70,31 @@ export default{
             const y = row * size
 
             if ((row + col) % 2 === 0) {
-              ctx.fillStyle = '#92DC70' // Light
+              context.fillStyle = '#92DC70' // Light
             } else {
-              ctx.fillStyle = '#85CB64' // Dark
+              context.fillStyle = '#85CB64' // Dark
             }
 
-            ctx.fillRect(x, y, size, size)
+            context.fillRect(x, y, size, size)
+
+            // CREATE AND PLOT APLLY 
+            this.AppleX = this.numberRandomToApply
+            this.AppleY = this.numberRandomToApply
+            context.fillStyle = "red"
+            context.fillRect(this.AppleX * this.sizeSquares, this.AppleY * this.sizeSquares, this.sizeSquares, this.sizeSquares)
+            
+
+            // CREATE AND PLOT SNAke 
+            this.snakeTrailX = this.numberRandomToSnake
+            this.snakeTrailY = this.numberRandomToSnake
+            context.fillStyle = "gray"
+            context.fillRect(this.snakeTrailX * this.sizeSquares, this.snakeTrailY * this.sizeSquares, this.snakeTrail * this.sizeSquares, this.sizeSquares)
           }
         }
       }
     },
+
+
 
     processingGame () {
       this.snakeTrailX = this.speedX
@@ -81,7 +102,7 @@ export default{
 
       if(this.snakeTrailX < 0) {
         // this.endGame()
-      }
+      } 
     }
   },
 };
