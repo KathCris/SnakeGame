@@ -20,7 +20,7 @@
 
 
 <script lang="ts">
-// import defineComponent from 'nuxt'
+import { ref } from "vue"
 
 export default{
   data() {
@@ -28,18 +28,19 @@ export default{
       numberRandomToApply: 1,
       numberRandomToSnake: 1, 
       showButtonStart: true,
-      context: null,
       bgColorRefBoard: ref('green'),
       sizeSquares: 24,
       qtdSquares: 30,
-      snakeTrail: 0,
-      // snakeTrail: [],
+      snakeTail: 0,
+      trail: [],
       snakeTrailX: 15,
       snakeTrailY: 15,
       AppleX: 10,
       AppleY: 10,
       speedX: 0,
       speedY: 0,
+      contextCanvas: ref<CanvasRenderingContext2D  | null>(null),
+      refBoard: ref<HTMLCanvasElement | null>(null),
     }
   },
   
@@ -61,11 +62,11 @@ export default{
   // Methods
   methods: {
     createBoard () {
-      this.snakeTrail = 5
-      const refBoard = this.$refs.board as HTMLCanvasElement
-      const context = refBoard?.getContext('2d')
+      this.snakeTail = 5
+      this.refBoard = this.$refs.board as HTMLCanvasElement
+      this.contextCanvas = this.refBoard?.getContext('2d')
 
-      if (context) {
+      if (this.contextCanvas) {
         const size = this.sizeSquares;
         const qtdSquares = this.qtdSquares;
 
@@ -75,25 +76,25 @@ export default{
             const y = row * size
 
             if ((row + col) % 2 === 0) {
-              context.fillStyle = '#92DC70' // Light
+              this.contextCanvas.fillStyle = '#92DC70' // Light
             } else {
-              context.fillStyle = '#85CB64' // Dark
+              this.contextCanvas.fillStyle = '#85CB64' // Dark
             }
 
-            context.fillRect(x, y, size, size)
+            this.contextCanvas.fillRect(x, y, size, size)
 
             // CREATE AND PLOT APLLY 
             this.AppleX = this.numberRandomToApply
             this.AppleY = this.numberRandomToApply
-            context.fillStyle = "red"
-            context.fillRect(this.AppleX * this.sizeSquares, this.AppleY * this.sizeSquares, this.sizeSquares, this.sizeSquares)
+            this.contextCanvas.fillStyle = "red"
+            this.contextCanvas.fillRect(this.AppleX * this.sizeSquares, this.AppleY * this.sizeSquares, this.sizeSquares, this.sizeSquares)
             
 
             // CREATE AND PLOT SNAke 
             this.snakeTrailX = this.numberRandomToSnake
             this.snakeTrailY = this.numberRandomToSnake
-            context.fillStyle = "gray"
-            context.fillRect(this.snakeTrailX * this.sizeSquares, this.snakeTrailY * this.sizeSquares, this.snakeTrail * this.sizeSquares, this.sizeSquares)
+            this.contextCanvas.fillStyle = "gray"
+            this.contextCanvas.fillRect(this.snakeTrailX * this.sizeSquares, this.snakeTrailY * this.sizeSquares, this.snakeTail * this.sizeSquares, this.sizeSquares)
           }
         }
       }
@@ -101,16 +102,24 @@ export default{
 
     startGame () {
       this.showButtonStart = false
+      setInterval(() => {this.processingGame(), 60})
     },
 
 
-    processingGame () {
+    processingGame () {      
       this.snakeTrailX = this.speedX
       this.snakeTrailY = this.speedY
 
-      if(this.snakeTrailX < 0) {
+      if(this.snakeTrailX < 0 || 
+          this.snakeTrailX > this.qtdSquares || 
+          this.snakeTrailY < 0 || 
+          this.snakeTrailY > this.qtdSquares) {
         // this.endGame()
-      } 
+      }
+
+      for (let index = 0; index < this.trail.length; index++) {
+        
+      }
     }
   },
 };
