@@ -32,13 +32,16 @@ export default{
       sizeSquares: 24,
       qtdSquares: 30,
       snakeTail: 0,
-      trail: [],
+      trail: [{
+        x: 10,
+        y: 1
+      }],
       snakeTrailX: 15,
       snakeTrailY: 15,
       AppleX: 10,
       AppleY: 10,
-      speedX: 0,
-      speedY: 0,
+      positionX: 0,
+      positionY: 0,
       contextCanvas: ref<CanvasRenderingContext2D  | null>(null),
       refBoard: ref<HTMLCanvasElement | null>(null),
     }
@@ -91,10 +94,10 @@ export default{
             
 
             // CREATE AND PLOT SNAke 
-            this.snakeTrailX = this.numberRandomToSnake
-            this.snakeTrailY = this.numberRandomToSnake
-            this.contextCanvas.fillStyle = "gray"
-            this.contextCanvas.fillRect(this.snakeTrailX * this.sizeSquares, this.snakeTrailY * this.sizeSquares, this.snakeTail * this.sizeSquares, this.sizeSquares)
+            // this.snakeTrailX = this.numberRandomToSnake
+            // this.snakeTrailY = this.numberRandomToSnake
+            // this.contextCanvas.fillStyle = "gray"
+            // this.contextCanvas.fillRect(this.snakeTrailX * this.sizeSquares, this.snakeTrailY * this.sizeSquares, this.snakeTail * this.sizeSquares, this.sizeSquares)
           }
         }
       }
@@ -106,20 +109,45 @@ export default{
     },
 
 
-    processingGame () {      
-      this.snakeTrailX = this.speedX
-      this.snakeTrailY = this.speedY
-
+    processingGame () {    
+      
       if(this.snakeTrailX < 0 || 
           this.snakeTrailX > this.qtdSquares || 
           this.snakeTrailY < 0 || 
           this.snakeTrailY > this.qtdSquares) {
-        // this.endGame()
+            this.endGame()
       }
 
-      for (let index = 0; index < this.trail.length; index++) {
-        
+      if(this.contextCanvas) {
+        for (let index = 0; index < this.trail.length; index++) {
+          this.contextCanvas.fillStyle = "gray"
+          this.contextCanvas?.fillRect(this.trail[index].x*this.sizeSquares, this.trail[index].y*this.sizeSquares, 
+                                        this.snakeTail * this.sizeSquares, this.sizeSquares)
+        }
       }
+      this.trail[0].x = this.snakeTrailX
+      this.trail[0].y = this.snakeTrailY
+
+      // while (this.trail.length > this.snakeTail) {
+      //   const calcTailX = this.snakeTail - this.trail[0].x
+      //   const calcTailY = this.snakeTail - this.trail[0].y
+
+      //   console.log('calcTailX', calcTailX)
+      //   console.log('calcTailY', calcTailY)
+      // }
+
+      // vereficação para aumentar o tamanho da cobra
+      if(this.AppleX === this.snakeTrailX && this.AppleY === this.snakeTrailY) {
+        this.trail[0].x + 1
+        this.trail[0].y + 1
+        // random of apple
+        this.AppleX = Math.floor(Math.random()*this.qtdSquares)
+        this.AppleY = Math.floor(Math.random()*this.qtdSquares)
+      }
+    },
+
+    endGame () {
+      console.log('Perdeu o jogo!')
     }
   },
 };
