@@ -3,10 +3,14 @@
     <canvas ref="board" :width="canvasSize" :height="canvasSize"></canvas>
   </div> -->
 
+  <div v-if="showGameOver" class="screenOpacityGameOver">
+    <h1 class="titleGameOver">Game over!</h1>
+    <button @click="restartGame" class="buttonStart" type="button">Jogar novamente</button>
+  </div>
   <div v-if="showButtonStart" class="containerButtonStart">
     <button @click="startGame" class="buttonStart" type="button">Iniciar jogo</button>
   </div>
-  <div v-if="showButtonStart" class="screenOpacity" />
+  <div v-if="showButtonStart" :class="{'screenOpacity': showButtonStart, 'screenOpacityGameOver': showGameOver}" />
     <div class="configContainerCanvas">
       <canvas
         :width="canvasSize" 
@@ -26,6 +30,7 @@ export default defineComponent({
       canvasSize: 600,
       cellSize: 20,
       showButtonStart: true,
+      showGameOver: false,
       bgColorRefBoard: ref('green'),
       board: ref<HTMLCanvasElement | null>(null),
       contextCanvas: ref<CanvasRenderingContext2D | null>(null),
@@ -38,7 +43,6 @@ export default defineComponent({
 
   methods: {
     generateRandomFood() {
-      console.log('entrei generateRandomFood')
         this.food.x= Math.floor(Math.random() * (this.canvasSize / this.cellSize)),
         this.food.y= Math.floor(Math.random() * (this.canvasSize / this.cellSize))
     },
@@ -77,6 +81,7 @@ export default defineComponent({
         y: this.snake[0].y + this.direction.y
       };
 
+
       // Game over conditions
       if (
         newHead.x < 0 || newHead.x >= this.canvasSize / this.cellSize ||
@@ -84,7 +89,6 @@ export default defineComponent({
         this.snake.some(segment => segment.x === newHead.x && segment.y === newHead.y)
       ) {
         // alert('Game Over');
-        this.showButtonStart = true 
         this.gameOver()
       }
 
@@ -102,12 +106,23 @@ export default defineComponent({
 
     gameOver () {
       clearInterval(this.intervalId);
-
+      this.showGameOver = true
+      this.generateRandomFood()
+      this.snake= [{ x: 0, y: 0 }]
     },
+
 
     startGame () {
       
       this.showButtonStart = false
+
+      this.intervalId = window.setInterval(this.updateGame, 60);
+      window.addEventListener('keydown', this.changeDirection);
+    },
+
+    restartGame () {
+      
+      this.showGameOver = false
 
       this.intervalId = window.setInterval(this.updateGame, 60);
       window.addEventListener('keydown', this.changeDirection);
@@ -150,6 +165,12 @@ export default defineComponent({
 
 <style scoped>
 
+.titleGameOver {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 32px;
+  color: white;
+}
+
 canvas {
   border: 1px solid black;
   display: block;
@@ -177,6 +198,24 @@ canvas {
   z-index: 10; 
   opacity: 0.6;
 }
+.screenOpacityGameOver {
+  background-color: black; 
+  height: 100vh; 
+  width: 100%; 
+  position: absolute; 
+  z-index: 10; 
+  opacity: 0.6;
+
+
+  width: 100%; 
+  display: flex; 
+  flex-direction: column;
+  position: absolute; 
+  z-index: 20; 
+  justify-content: center; 
+  align-items: center; 
+  height: 100vh;
+}
 
 .configContainerCanvas {
   position: relative; 
@@ -189,6 +228,16 @@ canvas {
   align-items: center;
 }
 
+.containerGameOver{
+  width: 100%; 
+  display: flex; 
+  flex-direction: column;
+  position: absolute; 
+  z-index: 20; 
+  justify-content: center; 
+  align-items: center; 
+  height: 100vh;
+}
 .containerButtonStart{
   width: 100%; 
   display: flex; 
