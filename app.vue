@@ -1,9 +1,11 @@
 <script lang="ts">
-  import BoardGame from './components/BoardGame.vue';
+  // import BoardGame from './components/BoardGame.vue';
+  import SnakeGame from './components/SnakeGame.vue';
 </script>
 
 <template>
   <div>
-  <BoardGame />
+  <!-- <BoardGame /> -->
+  <SnakeGame />
   </div>
 </template>

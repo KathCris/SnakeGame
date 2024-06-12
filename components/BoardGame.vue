@@ -10,7 +10,7 @@
         ref="board"
         :style="{ backgroundColor: bgColorRefBoard }"
       />
-  </div>
+    </div>
   <!-- <div class="apple">
     <div class="apple-body"></div>
     <div class="apple-leaf"></div>
@@ -105,11 +105,12 @@ export default{
 
     startGame () {
       this.showButtonStart = false
-      setInterval(() => {this.processingGame(), 60})
+      setInterval(() => {this.processingGame()}, 60)
     },
 
-
     processingGame () {    
+
+      console.log('processingGame')
       
       if(this.snakeTrailX < 0 || 
           this.snakeTrailX > this.qtdSquares || 
@@ -148,7 +149,18 @@ export default{
 
     endGame () {
       console.log('Perdeu o jogo!')
-    }
+    },
+
+    // keyPush (event: any) {
+    //     switch (event.keyCode) {
+    //       case 37:
+            
+    //         break;
+        
+    //       default:
+    //         break;
+    //     }
+    // }
   },
 };
 </script>
