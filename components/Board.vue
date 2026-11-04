@@ -15,12 +15,20 @@
     const size = 34; // Tamanho de cada quadrado em pixels
     const colorLight = '#88E788'; // Verde claro
     const colorDark = '#1fa700';  // Verde escuro
+    const borderThickness = 10;
+
+    // Limpa o canvas para re-renderizações
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (!ctx) return;
 
   // Ajusta o tamanho do canvas para ocupar todo o container
   canvas.width = canvas.parentElement?.clientWidth || window.innerWidth;
   canvas.height = canvas.parentElement?.clientHeight || window.innerHeight;
+
+  ctx.strokeStyle = '#006400'; // Verde escuro (DarkGreen)
+  ctx.lineWidth = borderThickness;
+
 
   // Loops para preencher a tela com os quadrados alternados
   for (let y = 0; y < canvas.height; y += size) {
@@ -33,5 +41,12 @@
       ctx.fillRect(x, y, size, size);
     }
   }
+
+  ctx.strokeRect(
+    borderThickness / 2, 
+    borderThickness / 2, 
+    canvas.width - borderThickness, 
+    canvas.height - borderThickness
+  );
 });
   </script>
