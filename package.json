@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@phosphor-icons/vue": "^2.2.1",
     "@tailwindcss/vite": "^4.3.3",
     "nuxt": "^3.11.2",
     "tailwindcss": "^4.3.3",

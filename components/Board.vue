@@ -2,15 +2,17 @@
   <div>
     <div
       ref="containerRef"
-      class="w-full h-full min-h-screen flex items-center justify-center pt-10 pb-10 pl-25 pr-25"
+      class="w-full h-full max-h-screen flex flex-col items-center justify-center pt-5 pb-10 pl-25 pr-25"
     >
-      <canvas ref="canvasRef" class="w-full h-full rounded-lg"></canvas>
+      <HeaderBoard />
+      <canvas ref="canvasRef" class="w-full h-full rounded-b-lg"></canvas>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
+import HeaderBoard from "./HeaderBoard.vue";
 
 const canvasRef = ref(null);
 const containerRef = ref(null);
@@ -46,12 +48,21 @@ const drawGridAndBorder = () => {
     }
   }
 
-  ctx.strokeRect(
-    borderThickness / 2,
-    borderThickness / 2,
-    canvas.width - borderThickness,
-    canvas.height - borderThickness,
-  );
+
+  // desenha a borda interna em apenas 3 lados (exclui o topo)
+  const halfThickness = borderThickness / 2;
+  ctx.beginPath();
+  // começa no topo direito
+  ctx.moveTo(canvas.width - halfThickness, 0);
+  // desce até o canto inferior direito
+  ctx.lineTo(canvas.width - halfThickness, canvas.height - halfThickness);
+  // vai para o canto inferior esquerdo
+  ctx.lineTo(halfThickness, canvas.height - halfThickness);
+  // sobe até o topo esquerdo
+  ctx.lineTo(halfThickness, 0);
+  
+  // Executa o desenho da linha aberta
+  ctx.stroke();
 };
 
 onMounted(() => {
