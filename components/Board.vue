@@ -21,6 +21,12 @@
           :y="(applePosition.row + 0.5) * size"
         />
       </div>
+      <div class="absolute inset-0 pointer-events-none">
+        <Snake
+          :x="150"
+          :y="150"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -29,6 +35,7 @@
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import HeaderBoard from "./HeaderBoard.vue";
 import Apple from "./Apple.vue";
+import Snake from "./Snake.vue";
 
 const canvasRef = ref(null);
 const containerRef = ref(null);
