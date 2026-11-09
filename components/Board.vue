@@ -21,12 +21,19 @@
           :y="(applePosition.row + 0.5) * size"
         />
       </div>
-      <div class="absolute inset-0 pointer-events-none">
+      <!-- <div class="absolute inset-0 pointer-events-none">
         <Snake
           :x="150"
           :y="150"
         />
-      </div>
+      </div> -->
+      <div class="absolute inset-0 pointer-events-none">
+  <Snake
+    :x="(snakePosition.col + 0.5) * size"
+    :y="(snakePosition.row + 0.5) * size"
+    :direction="direction"
+  />
+</div>
     </div>
   </div>
 </template>
@@ -105,11 +112,125 @@ const getRandomCol = () => {
   return Math.floor(Math.random() * (colCount - 1)) + 1;
 };
 
-onMounted(() => {
-  drawGridAndBorder();
-  applePosition.value.row = getRandomRow();
-  applePosition.value.col = getRandomCol();
+//AREA DA MOVIMENTAÇÃO DA COBRA
+// Posição inicial da cobra
+const snakePosition = ref({
+  row: 5,
+  col: 5,
+});
 
+// Direção atual da cobra
+const direction = ref("right");
+
+// Próxima direção solicitada
+const nextDirection = ref("right");
+
+// Velocidade da cobra (milissegundos)
+const speed = 60;
+
+let movementInterval = null;
+
+const keyDirections = {
+  ArrowUp: "up",
+  ArrowDown: "down",
+  ArrowLeft: "left",
+  ArrowRight: "right",
+
+  w: "up",
+  s: "down",
+  a: "left",
+  d: "right",
+
+  W: "up",
+  S: "down",
+  A: "left",
+  D: "right",
+};
+
+const oppositeDirections = {
+  up: "down",
+  down: "up",
+  left: "right",
+  right: "left",
+};
+
+const handleKeydown = (event) => {
+  const newDirection = keyDirections[event.key];
+
+  if (!newDirection) return;
+
+  event.preventDefault();
+
+  // Impede que a cobra vire diretamente para trás
+  if (newDirection === oppositeDirections[direction.value]) {
+    return;
+  }
+
+  nextDirection.value = newDirection;
+};
+
+const moveSnake = () => {
+  direction.value = nextDirection.value;
+
+  const newPosition = {
+    ...snakePosition.value,
+  };
+
+  switch (direction.value) {
+    case "up":
+      newPosition.row -= 1;
+      break;
+
+    case "down":
+      newPosition.row += 1;
+      break;
+
+    case "left":
+      newPosition.col -= 1;
+      break;
+
+    case "right":
+      newPosition.col += 1;
+      break;
+  }
+
+  // Verifica os limites do tabuleiro
+  const isOutOfBounds =
+    newPosition.row < 0 ||
+    newPosition.row >= rowCount ||
+    newPosition.col < 0 ||
+    newPosition.col >= colCount;
+
+  if (isOutOfBounds) {
+    clearInterval(movementInterval);
+    movementInterval = null;
+
+    console.log("Game Over!");
+
+    return;
+  }
+
+  // Atualiza a posição da cobra
+  snakePosition.value = newPosition;
+};
+
+onMounted(() => {
+  // Desenha o tabuleiro e calcula suas dimensões
+  drawGridAndBorder();
+
+  // Posiciona a cobra no centro do tabuleiro
+  snakePosition.value = {
+    row: Math.floor(rowCount / 2),
+    col: Math.floor(colCount / 2),
+  };
+
+  // Registra os eventos do teclado
+  window.addEventListener("keydown", handleKeydown);
+
+  // Inicia a movimentação automática
+  movementInterval = setInterval(moveSnake, speed);
+
+  // Observer para redimensionamento
   resizeObserver = new ResizeObserver(() => {
     requestAnimationFrame(drawGridAndBorder);
   });
@@ -121,5 +242,12 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   resizeObserver?.disconnect();
+
+  window.removeEventListener("keydown", handleKeydown);
+
+  if (movementInterval) {
+    clearInterval(movementInterval);
+  }
 });
+
 </script>
