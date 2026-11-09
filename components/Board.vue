@@ -1,4 +1,3 @@
-
 <template>
   <div
     ref="containerRef"
@@ -10,10 +9,7 @@
       ref="boardAreaRef"
       class="relative w-full flex-1 min-h-0 overflow-hidden rounded-b-lg"
     >
-      <canvas
-        ref="canvasRef"
-        class="absolute inset-0 w-full h-full"
-      />
+      <canvas ref="canvasRef" class="absolute inset-0 w-full h-full" />
 
       <div class="absolute inset-0 pointer-events-none">
         <Apple
@@ -21,19 +17,9 @@
           :y="(applePosition.row + 0.5) * size"
         />
       </div>
-      <!-- <div class="absolute inset-0 pointer-events-none">
-        <Snake
-          :x="150"
-          :y="150"
-        />
-      </div> -->
       <div class="absolute inset-0 pointer-events-none">
-  <Snake
-    :x="(snakePosition.col + 0.5) * size"
-    :y="(snakePosition.row + 0.5) * size"
-    :direction="direction"
-  />
-</div>
+        <Snake :segments="snakeSegments" :direction="direction" />
+      </div>
     </div>
   </div>
 </template>
@@ -82,8 +68,7 @@ const drawGridAndBorder = () => {
   // Desenha os quadrados alternados
   for (let y = 0; y < canvas.height; y += size) {
     for (let x = 0; x < canvas.width; x += size) {
-      const isEven =
-        (Math.floor(x / size) + Math.floor(y / size)) % 2 === 0;
+      const isEven = (Math.floor(x / size) + Math.floor(y / size)) % 2 === 0;
 
       ctx.fillStyle = isEven ? colorLight : colorDark;
       ctx.fillRect(x, y, size, size);
@@ -112,22 +97,43 @@ const getRandomCol = () => {
   return Math.floor(Math.random() * (colCount - 1)) + 1;
 };
 
+const generateApple = () => {
+  let newApplePosition;
+
+  do {
+    newApplePosition = {
+      row: getRandomRow(),
+      col: getRandomCol(),
+    };
+  } while (
+    snakeSegments.value.some(
+      (segment) =>
+        segment.row === newApplePosition.row &&
+        segment.col === newApplePosition.col,
+    )
+  );
+
+  applePosition.value = newApplePosition;
+};
+
 //AREA DA MOVIMENTAÇÃO DA COBRA
-// Posição inicial da cobra
-const snakePosition = ref({
-  row: 5,
-  col: 5,
-});
+// Posição inicial da cobra com movimentação por parte do corpo
+const snakeSegments = ref([
+  { row: 5, col: 5 }, // Cabeça
+  { row: 5, col: 4 }, // Corpo
+  { row: 5, col: 3 },
+  { row: 5, col: 2 }, // Cauda
+]);
 
-// Direção atual da cobra
+// Direção inicial da cobra
 const direction = ref("right");
-
 // Próxima direção solicitada
 const nextDirection = ref("right");
 
 // Velocidade da cobra (milissegundos)
-const speed = 60;
+const speed = 120;
 
+//Start da movimentação da cobra
 let movementInterval = null;
 
 const keyDirections = {
@@ -172,65 +178,103 @@ const handleKeydown = (event) => {
 const moveSnake = () => {
   direction.value = nextDirection.value;
 
-  const newPosition = {
-    ...snakePosition.value,
-  };
+  const head = snakeSegments.value[0];
+
+  const newHead = { ...head };
 
   switch (direction.value) {
     case "up":
-      newPosition.row -= 1;
+      newHead.row -= 1;
       break;
 
     case "down":
-      newPosition.row += 1;
+      newHead.row += 1;
       break;
 
     case "left":
-      newPosition.col -= 1;
+      newHead.col -= 1;
       break;
 
     case "right":
-      newPosition.col += 1;
+      newHead.col += 1;
       break;
   }
 
   // Verifica os limites do tabuleiro
   const isOutOfBounds =
-    newPosition.row < 0 ||
-    newPosition.row >= rowCount ||
-    newPosition.col < 0 ||
-    newPosition.col >= colCount;
+    newHead.row < 0 ||
+    newHead.row >= rowCount ||
+    newHead.col < 0 ||
+    newHead.col >= colCount;
 
   if (isOutOfBounds) {
     clearInterval(movementInterval);
     movementInterval = null;
-
     console.log("Game Over!");
-
     return;
   }
 
-  // Atualiza a posição da cobra
-  snakePosition.value = newPosition;
+  // Verifica se a cabeça encontrou a maçã
+  const ateApple =
+    newHead.row === applePosition.value.row &&
+    newHead.col === applePosition.value.col;
+
+  // Verifica colisão com o próprio corpo
+  const bodyToCheck = ateApple
+    ? snakeSegments.value
+    : snakeSegments.value.slice(0, -1);
+
+  const hitBody = bodyToCheck.some(
+    (segment) => segment.row === newHead.row && segment.col === newHead.col,
+  );
+
+  if (hitBody) {
+    clearInterval(movementInterval);
+    movementInterval = null;
+    console.log("Game Over!");
+    return;
+  }
+
+  // Adiciona a nova cabeça
+  const newSegments = [newHead, ...snakeSegments.value];
+
+  // Se não comeu a maçã, remove a cauda
+  if (!ateApple) {
+    newSegments.pop();
+  }
+
+  snakeSegments.value = newSegments;
+
+  // Se comeu a maçã, gera outra
+  if (ateApple) {
+    generateApple();
+  }
 };
 
 onMounted(() => {
-  // Desenha o tabuleiro e calcula suas dimensões
   drawGridAndBorder();
 
-  // Posiciona a cobra no centro do tabuleiro
-  snakePosition.value = {
-    row: Math.floor(rowCount / 2),
-    col: Math.floor(colCount / 2),
-  };
+  // Inicializa a cobra no centro do tabuleiro
+  const centerRow = Math.floor(rowCount / 2);
+  const centerCol = Math.floor(colCount / 2);
 
-  // Registra os eventos do teclado
+  snakeSegments.value = [
+    { row: centerRow, col: centerCol },
+    { row: centerRow, col: centerCol - 1 },
+    { row: centerRow, col: centerCol - 2 },
+    { row: centerRow, col: centerCol - 3 },
+  ];
+
+  // Gera a primeira maçã
+  generateApple();
+
+  // Captura os comandos do teclado
   window.addEventListener("keydown", handleKeydown);
 
-  // Inicia a movimentação automática
+  // Inicia a movimentação
   movementInterval = setInterval(moveSnake, speed);
 
-  // Observer para redimensionamento
+  // Observer de redimensionamento
   resizeObserver = new ResizeObserver(() => {
     requestAnimationFrame(drawGridAndBorder);
   });
@@ -249,5 +293,4 @@ onBeforeUnmount(() => {
     clearInterval(movementInterval);
   }
 });
-
 </script>
