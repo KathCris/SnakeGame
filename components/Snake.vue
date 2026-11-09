@@ -75,14 +75,6 @@ const props = defineProps({
     type: String,
     default: "right",
   },
-  rows: {
-    type: Number,
-    required: true,
-  },
-  cols: {
-    type: Number,
-    required: true,
-  },
   animationDuration: {
     type: Number,
     default: 150,

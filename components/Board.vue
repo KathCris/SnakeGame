@@ -33,6 +33,14 @@ import { ref, onMounted, onBeforeUnmount } from "vue";
 import HeaderBoard from "./HeaderBoard.vue";
 import Apple from "./Apple.vue";
 import Snake from "./Snake.vue";
+import { useGameSounds } from "~/composables/useGameSounds";
+
+const {
+  unlockAudio,
+  playBite,
+  playTurn,
+  playGameOver,
+} = useGameSounds();
 
 const canvasRef = ref(null);
 const containerRef = ref(null);
@@ -164,7 +172,7 @@ const oppositeDirections = {
   right: "left",
 };
 
-const handleKeydown = (event) => {
+const handleKeydown = async (event) => {
   const newDirection = keyDirections[event.key];
 
   if (!newDirection) return;
@@ -176,7 +184,32 @@ const handleKeydown = (event) => {
     return;
   }
 
+  if (newDirection !== nextDirection.value) {
+    // Primeiro desbloqueia o áudio
+    await unlockAudio();
+
+    nextDirection.value = newDirection;
+
+    // Depois reproduz o som
+    playTurn();
+  }
+
   nextDirection.value = newDirection;
+};
+
+let isGameOver = false;
+
+const endGame = () => {
+  if (isGameOver) return;
+
+  isGameOver = true;
+
+  playGameOver();
+
+  clearInterval(movementInterval);
+  movementInterval = null;
+
+  console.log("Game Over!");
 };
 
 const moveSnake = () => {
@@ -212,9 +245,7 @@ const moveSnake = () => {
     newHead.col >= colCount;
 
   if (isOutOfBounds) {
-    clearInterval(movementInterval);
-    movementInterval = null;
-    console.log("Game Over!");
+    endGame();
     return;
   }
 
@@ -233,9 +264,7 @@ const moveSnake = () => {
   );
 
   if (hitBody) {
-    clearInterval(movementInterval);
-    movementInterval = null;
-    console.log("Game Over!");
+    endGame();
     return;
   }
 
@@ -251,6 +280,7 @@ const moveSnake = () => {
 
   // Se comeu a maçã, gera outra
   if (ateApple) {
+    playBite();
     generateApple();
   }
 };
@@ -297,4 +327,10 @@ onBeforeUnmount(() => {
     clearInterval(movementInterval);
   }
 });
+
+// const startGame = async () => {
+//   await unlockAudio();
+
+//   // Sua lógica para iniciar o jogo
+// };
 </script>
