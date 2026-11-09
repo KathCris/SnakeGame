@@ -18,7 +18,11 @@
         />
       </div>
       <div class="absolute inset-0 pointer-events-none">
-        <Snake :segments="snakeSegments" :direction="direction" />
+        <Snake
+          :segments="snakeSegments"
+          :direction="direction"
+          :animation-duration="speed"
+        />
       </div>
     </div>
   </div>
