@@ -104,19 +104,19 @@ const playNoise = (
 
 // Mordida na maçã
 const playBite = () => {
-  playNoise(0.12, 0.16, 2200, "lowpass");
-  playTone(180, 90, 0.09, 0.07, "triangle");
+  playNoise(0.12, 0.35, 2200, "lowpass");
+  playTone(180, 90, 0.09, 0.18, "triangle");
 };
 
 // Mudança de direção
 const playTurn = () => {
-  playTone(650, 420, 0.07, 0.045, "sine");
+  playTone(650, 420, 0.07, 0.15, "sine");
 };
 
 // Colisão / Game Over
 const playGameOver = () => {
-  playNoise(0.28, 0.25, 450, "lowpass");
-  playTone(150, 45, 0.32, 0.22, "triangle");
+  playNoise(0.28, 0.45, 450, "lowpass");
+  playTone(150, 45, 0.32, 0.40, "triangle");
 };
 
 export const useGameSounds = () => {
