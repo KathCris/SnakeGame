@@ -43,7 +43,6 @@ const {
 } = useGameSounds();
 
 const canvasRef = ref(null);
-const containerRef = ref(null);
 const boardAreaRef = ref(null);
 
 let resizeObserver = null;
