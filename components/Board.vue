@@ -29,18 +29,20 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted, onBeforeUnmount, watch } from "vue";
 import HeaderBoard from "./HeaderBoard.vue";
 import Apple from "./Apple.vue";
 import Snake from "./Snake.vue";
 import { useGameSounds } from "~/composables/useGameSounds";
 
-const {
-  unlockAudio,
-  playBite,
-  playTurn,
-  playGameOver,
-} = useGameSounds();
+const props = defineProps({
+  isPlaying: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const { unlockAudio, playBite, playTurn, playGameOver } = useGameSounds();
 
 const canvasRef = ref(null);
 const boardAreaRef = ref(null);
@@ -304,9 +306,6 @@ onMounted(() => {
   // Captura os comandos do teclado
   window.addEventListener("keydown", handleKeydown);
 
-  // Inicia a movimentação
-  movementInterval = setInterval(moveSnake, speed);
-
   // Observer de redimensionamento
   resizeObserver = new ResizeObserver(() => {
     requestAnimationFrame(drawGridAndBorder);
@@ -327,9 +326,17 @@ onBeforeUnmount(() => {
   }
 });
 
-// const startGame = async () => {
-//   await unlockAudio();
-
-//   // Sua lógica para iniciar o jogo
-// };
+// Observa quando isPlaying mudar de false para true
+watch(
+  () => props.isPlaying,
+  async (newValue) => {
+    if (newValue === true) {
+      console.log("O botão Start foi clicado! Iniciar movimento da cobra.");
+      // Chame aqui a função que inicia o intervalo/loop do jogo
+      await unlockAudio();
+      // Inicia a movimentação
+      movementInterval = setInterval(moveSnake, speed);
+    }
+  },
+);
 </script>

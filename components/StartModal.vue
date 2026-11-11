@@ -73,6 +73,7 @@
       </div>
     </div>
     <button
+      @click="emit('start-game')"
       class="flex items-center bg-blue-600 w-[366px] h-12 rounded-2xl text-amber-50 hover:bg-blue-800 hover:cursor-pointer gap-5 p-5"
     >
       <PhPlay :size="20" color="#fafafa" weight="fill" />
@@ -85,4 +86,6 @@
 <script setup>
 import AppleIcon from "./AppleIcon.vue";
 import { PhTrophy, PhPlay } from "@phosphor-icons/vue";
+
+const emit = defineEmits(['start-game']);
 </script>
