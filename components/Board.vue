@@ -3,7 +3,7 @@
     ref="containerRef"
     class="w-full h-screen max-h-screen flex flex-col items-center pt-5 pb-10 pl-25 pr-25"
   >
-    <HeaderBoard :is-muted="isMuted" @toggle-mute="toggleMute" />
+    <HeaderBoard :is-muted="isMuted" @toggle-mute="toggleMute" :apple-count="appleCount" :trophy-count="trophyCount"/>
     <div
       ref="boardAreaRef"
       class="relative w-full flex-1 min-h-0 overflow-hidden rounded-b-lg"
@@ -45,7 +45,7 @@ const isMuted = ref(false);
 const AUDIO_STORAGE_KEY = "is-muted";
 
 const loadAudioPreference = () => {
-  const savedPreference = sessionStorage.getItem(AUDIO_STORAGE_KEY);
+  const savedPreference = localStorage.getItem(AUDIO_STORAGE_KEY);
 
   isMuted.value = savedPreference === "true";
 };
@@ -53,7 +53,7 @@ const loadAudioPreference = () => {
 const toggleMute = () => {
   isMuted.value = !isMuted.value;
 
-  sessionStorage.setItem(
+  localStorage.setItem(
     AUDIO_STORAGE_KEY,
     String(isMuted.value)
   );
@@ -81,6 +81,32 @@ const applePosition = ref({
   row: 17,
   col: 38,
 });
+
+
+const appleCount = ref(0);
+const trophyCount = ref(0)
+
+const incrementApple = () => {
+  appleCount.value++;
+  incrementTrophy();
+};
+
+const TROPHY_STORAGE_KEY = "trophy-count";
+
+const loadTrophyCount = () => {
+  const savedTrophyCount = localStorage.getItem(TROPHY_STORAGE_KEY);
+
+  trophyCount.value = savedTrophyCount;
+};
+
+const incrementTrophy = () => {
+  if(trophyCount.value < appleCount.value){
+    trophyCount.value++;
+    localStorage.setItem(TROPHY_STORAGE_KEY, trophyCount.value);
+  } else {
+    return trophyCount.value
+  }
+};
 
 const drawGridAndBorder = () => {
   const canvas = canvasRef.value;
@@ -304,12 +330,14 @@ const moveSnake = () => {
       playBite();
     }
     generateApple();
+    incrementApple();
   }
 };
 
 onMounted(() => {
   drawGridAndBorder();
   loadAudioPreference();
+  loadTrophyCount();
 
   // Inicializa a cobra no centro do tabuleiro
   const centerRow = Math.floor(rowCount / 2);
