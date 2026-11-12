@@ -14,20 +14,20 @@
       </div>
     </div>
     <div>
-      <template v-if="speaker">
+      <template v-if="!isMuted">
         <PhSpeakerHigh
           :size="25"
-          color="#d2af32"
+          color="#FFFFFF"
           weight="fill"
-          @click="toggleSpeaker"
+          @click="emit('toggle-mute')"
         />
       </template>
       <template v-else>
         <PhSpeakerSimpleSlash
           :size="25"
-          color="#d2af32"
+          color="#FFFFFF"
           weight="fill"
-          @click="toggleSpeaker"
+          @click="emit('toggle-mute')"
         />
       </template>
     </div>
@@ -44,12 +44,16 @@ import {
 } from "@phosphor-icons/vue";
 import AppleIcon from "./AppleIcon.vue";
 const appleCount = ref(10);
-const trophyCount = ref(0);
-const speaker = ref(true);
+const trophyCount = ref(0)
 
-const toggleSpeaker = () => {
-  speaker.value = !speaker.value;
-};
+defineProps({
+  isMuted: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const emit = defineEmits(["toggle-mute"]);
 
 const incrementApple = () => {
   appleCount.value++;

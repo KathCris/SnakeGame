@@ -3,8 +3,7 @@
     ref="containerRef"
     class="w-full h-screen max-h-screen flex flex-col items-center pt-5 pb-10 pl-25 pr-25"
   >
-    <HeaderBoard />
-
+    <HeaderBoard :is-muted="isMuted" @toggle-mute="toggleMute" />
     <div
       ref="boardAreaRef"
       class="relative w-full flex-1 min-h-0 overflow-hidden rounded-b-lg"
@@ -41,6 +40,24 @@ const props = defineProps({
     default: false,
   },
 });
+
+const isMuted = ref(false);
+const AUDIO_STORAGE_KEY = "is-muted";
+
+const loadAudioPreference = () => {
+  const savedPreference = sessionStorage.getItem(AUDIO_STORAGE_KEY);
+
+  isMuted.value = savedPreference === "true";
+};
+
+const toggleMute = () => {
+  isMuted.value = !isMuted.value;
+
+  sessionStorage.setItem(
+    AUDIO_STORAGE_KEY,
+    String(isMuted.value)
+  );
+};
 
 const { unlockAudio, playBite, playTurn, playGameOver } = useGameSounds();
 
@@ -185,7 +202,7 @@ const handleKeydown = async (event) => {
     return;
   }
 
-  if (newDirection !== nextDirection.value) {
+  if (newDirection !== nextDirection.value && isMuted.value === false) {
     // Primeiro desbloqueia o áudio
     await unlockAudio();
 
@@ -205,7 +222,9 @@ const endGame = () => {
 
   isGameOver = true;
 
-  playGameOver();
+  if(isMuted.value === false) {
+    playGameOver();
+  }
 
   clearInterval(movementInterval);
   movementInterval = null;
@@ -281,13 +300,16 @@ const moveSnake = () => {
 
   // Se comeu a maçã, gera outra
   if (ateApple) {
-    playBite();
+    if (isMuted.value === false) {
+      playBite();
+    }
     generateApple();
   }
 };
 
 onMounted(() => {
   drawGridAndBorder();
+  loadAudioPreference();
 
   // Inicializa a cobra no centro do tabuleiro
   const centerRow = Math.floor(rowCount / 2);
