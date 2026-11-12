@@ -45,7 +45,7 @@ const isMuted = ref(false);
 const AUDIO_STORAGE_KEY = "is-muted";
 
 const loadAudioPreference = () => {
-  const savedPreference = sessionStorage.getItem(AUDIO_STORAGE_KEY);
+  const savedPreference = localStorage.getItem(AUDIO_STORAGE_KEY);
 
   isMuted.value = savedPreference === "true";
 };
@@ -53,7 +53,7 @@ const loadAudioPreference = () => {
 const toggleMute = () => {
   isMuted.value = !isMuted.value;
 
-  sessionStorage.setItem(
+  localStorage.setItem(
     AUDIO_STORAGE_KEY,
     String(isMuted.value)
   );
@@ -94,7 +94,7 @@ const incrementApple = () => {
 const TROPHY_STORAGE_KEY = "trophy-count";
 
 const loadTrophyCount = () => {
-  const savedTrophyCount = sessionStorage.getItem(TROPHY_STORAGE_KEY);
+  const savedTrophyCount = localStorage.getItem(TROPHY_STORAGE_KEY);
 
   trophyCount.value = savedTrophyCount;
 };
@@ -102,7 +102,7 @@ const loadTrophyCount = () => {
 const incrementTrophy = () => {
   if(trophyCount.value < appleCount.value){
     trophyCount.value++;
-    sessionStorage.setItem(TROPHY_STORAGE_KEY, trophyCount.value);
+    localStorage.setItem(TROPHY_STORAGE_KEY, trophyCount.value);
   } else {
     return trophyCount.value
   }
