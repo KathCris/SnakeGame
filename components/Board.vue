@@ -3,7 +3,7 @@
     ref="containerRef"
     class="w-full h-screen max-h-screen flex flex-col items-center pt-5 pb-10 pl-25 pr-25"
   >
-    <HeaderBoard :is-muted="isMuted" @toggle-mute="toggleMute" />
+    <HeaderBoard :is-muted="isMuted" @toggle-mute="toggleMute" :apple-count="appleCount"/>
     <div
       ref="boardAreaRef"
       class="relative w-full flex-1 min-h-0 overflow-hidden rounded-b-lg"
@@ -81,6 +81,18 @@ const applePosition = ref({
   row: 17,
   col: 38,
 });
+
+
+const appleCount = ref(0);
+const trophyCount = ref(0)
+
+const incrementApple = () => {
+  appleCount.value++;
+};
+
+const incrementTrophy = () => {
+  trophyCount.value++;
+};
 
 const drawGridAndBorder = () => {
   const canvas = canvasRef.value;
@@ -304,6 +316,7 @@ const moveSnake = () => {
       playBite();
     }
     generateApple();
+    incrementApple();
   }
 };
 

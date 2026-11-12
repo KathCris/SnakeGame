@@ -43,23 +43,18 @@ import {
   PhSpeakerSimpleSlash,
 } from "@phosphor-icons/vue";
 import AppleIcon from "./AppleIcon.vue";
-const appleCount = ref(10);
-const trophyCount = ref(0)
 
 defineProps({
   isMuted: {
     type: Boolean,
     default: false,
   },
+  appleCount: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const emit = defineEmits(["toggle-mute"]);
 
-const incrementApple = () => {
-  appleCount.value++;
-};
-
-const incrementTrophy = () => {
-  trophyCount.value++;
-};
 </script>
