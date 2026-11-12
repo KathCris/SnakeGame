@@ -82,12 +82,15 @@ const applePosition = ref({
   col: 38,
 });
 
+const APPLE_STORAGE_KEY = "apple-count";
 
 const appleCount = ref(0);
 const trophyCount = ref(0)
 
+
 const incrementApple = () => {
   appleCount.value++;
+  sessionStorage.setItem(APPLE_STORAGE_KEY, appleCount.value)
   incrementTrophy();
 };
 

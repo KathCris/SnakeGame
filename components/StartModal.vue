@@ -10,11 +10,11 @@
         <div class="flex items-center justify-between gap-10">
           <div class="flex flex-col justify-center items-center gap-3">
             <AppleIcon />
-            <h2 class="text-white text-2xl font-bold">2</h2>
+            <h2 class="text-white text-2xl font-bold">{{ appleCount }}</h2>
           </div>
           <div class="flex flex-col justify-center items-center gap-3">
             <PhTrophy :size="32" color="#d2af32" weight="fill" />
-            <h2 class="text-white text-2xl font-bold">2</h2>
+            <h2 class="text-white text-2xl font-bold">{{ trophyCount }}</h2>
           </div>
         </div>
       </div>
@@ -73,7 +73,7 @@
       </div>
     </div>
     <button
-      @click="emit('start-game')"
+      @click="() => {emit('start-game'), startGame()}"
       class="flex items-center bg-blue-600 w-[366px] h-12 rounded-2xl text-amber-50 hover:bg-blue-800 hover:cursor-pointer gap-5 p-5"
     >
       <PhPlay :size="20" color="#fafafa" weight="fill" />
@@ -86,6 +86,39 @@
 <script setup>
 import AppleIcon from "./AppleIcon.vue";
 import { PhTrophy, PhPlay } from "@phosphor-icons/vue";
+import { onMounted } from "vue";
 
 const emit = defineEmits(['start-game']);
+
+const appleCount = ref(0)
+const trophyCount = ref(0)
+
+const TROPHY_STORAGE_KEY = "trophy-count";
+const APPLE_STORAGE_KEY = "apple-count";
+
+
+const loadTrophyCount = () => {
+  const savedTrophyCount = localStorage.getItem(TROPHY_STORAGE_KEY);
+
+  trophyCount.value = savedTrophyCount;
+};
+
+const loadAppleCount = () => {
+  const savedAppleCount = sessionStorage.getItem(APPLE_STORAGE_KEY);
+  if(savedAppleCount) {
+    appleCount.value = savedAppleCount
+  } else {
+    appleCount.value = 0
+  }
+}
+
+const startGame = () => {
+  appleCount.value = 0
+  sessionStorage.setItem(APPLE_STORAGE_KEY, appleCount.value);
+}
+
+onMounted(() => {
+  loadTrophyCount();
+  loadAppleCount();
+});
 </script>
