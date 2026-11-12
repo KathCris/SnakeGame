@@ -3,7 +3,7 @@
     ref="containerRef"
     class="w-full h-screen max-h-screen flex flex-col items-center pt-5 pb-10 pl-25 pr-25"
   >
-    <HeaderBoard :is-muted="isMuted" @toggle-mute="toggleMute" :apple-count="appleCount"/>
+    <HeaderBoard :is-muted="isMuted" @toggle-mute="toggleMute" :apple-count="appleCount" :trophy-count="trophyCount"/>
     <div
       ref="boardAreaRef"
       class="relative w-full flex-1 min-h-0 overflow-hidden rounded-b-lg"
@@ -88,10 +88,24 @@ const trophyCount = ref(0)
 
 const incrementApple = () => {
   appleCount.value++;
+  incrementTrophy();
+};
+
+const TROPHY_STORAGE_KEY = "trophy-count";
+
+const loadTrophyCount = () => {
+  const savedTrophyCount = sessionStorage.getItem(TROPHY_STORAGE_KEY);
+
+  trophyCount.value = savedTrophyCount;
 };
 
 const incrementTrophy = () => {
-  trophyCount.value++;
+  if(trophyCount.value < appleCount.value){
+    trophyCount.value++;
+    sessionStorage.setItem(TROPHY_STORAGE_KEY, trophyCount.value);
+  } else {
+    return trophyCount.value
+  }
 };
 
 const drawGridAndBorder = () => {
@@ -323,6 +337,7 @@ const moveSnake = () => {
 onMounted(() => {
   drawGridAndBorder();
   loadAudioPreference();
+  loadTrophyCount();
 
   // Inicializa a cobra no centro do tabuleiro
   const centerRow = Math.floor(rowCount / 2);

@@ -53,6 +53,10 @@ defineProps({
     type: Number,
     default: 0,
   },
+  trophyCount: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const emit = defineEmits(["toggle-mute"]);
