@@ -41,6 +41,8 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits(["end-game"]);
+
 const isMuted = ref(false);
 const AUDIO_STORAGE_KEY = "is-muted";
 
@@ -244,6 +246,13 @@ const handleKeydown = async (event) => {
   nextDirection.value = newDirection;
 };
 
+function stopMovement() {
+  if (movementInterval) {
+    clearInterval(movementInterval);
+    movementInterval = null;
+  }
+}
+
 let isGameOver = false;
 
 const endGame = () => {
@@ -258,7 +267,8 @@ const endGame = () => {
   clearInterval(movementInterval);
   movementInterval = null;
 
-  console.log("Game Over!");
+  stopMovement();
+  emit("end-game");
 };
 
 const moveSnake = () => {
@@ -337,7 +347,19 @@ const moveSnake = () => {
   }
 };
 
-onMounted(() => {
+
+function startMovement() {
+  if (movementInterval) return;
+
+  isGameOver = false;
+
+  movementInterval = setInterval(() => {
+    moveSnake();
+  }, speed);
+}
+
+
+onMounted(async () => {
   drawGridAndBorder();
   loadAudioPreference();
   loadTrophyCount();
@@ -367,9 +389,15 @@ onMounted(() => {
   if (boardAreaRef.value) {
     resizeObserver.observe(boardAreaRef.value);
   }
+
+  if (props.isPlaying) {
+    await unlockAudio();
+    startMovement();
+  }
 });
 
 onBeforeUnmount(() => {
+  stopMovement();
   resizeObserver?.disconnect();
 
   window.removeEventListener("keydown", handleKeydown);
