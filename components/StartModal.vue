@@ -6,7 +6,7 @@
       class="bg-blue-300 w-[360px] h-[400px] rounded-2xl flex flex-col pt-5 justify-between"
     >
       <div class="flex flex-col gap-10 items-center">
-        <h1 class="text-white text-4xl font-bold">Start Game</h1>
+        <h1 class="text-white text-4xl font-bold">{{isGameOver ? "Game Over" : "Start Game" }}</h1>
         <div class="flex items-center justify-between gap-10">
           <div class="flex flex-col justify-center items-center gap-3">
             <AppleIcon />
@@ -87,6 +87,13 @@
 import AppleIcon from "./AppleIcon.vue";
 import { PhTrophy, PhPlay } from "@phosphor-icons/vue";
 import { onMounted } from "vue";
+
+const props = defineProps({
+  isGameOver: {
+    type: Boolean,
+    default: false,
+  },
+});
 
 const emit = defineEmits(['start-game']);
 
