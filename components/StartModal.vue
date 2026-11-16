@@ -107,7 +107,7 @@ const APPLE_STORAGE_KEY = "apple-count";
 const loadTrophyCount = () => {
   const savedTrophyCount = localStorage.getItem(TROPHY_STORAGE_KEY);
 
-  trophyCount.value = savedTrophyCount;
+  trophyCount.value = Number(savedTrophyCount) || 0;
 };
 
 const loadAppleCount = () => {

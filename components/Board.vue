@@ -21,6 +21,8 @@
           :segments="snakeSegments"
           :direction="direction"
           :animation-duration="speed"
+          :cols="colCount"
+          :rows="rowCount"
         />
       </div>
     </div>
@@ -101,7 +103,7 @@ const TROPHY_STORAGE_KEY = "trophy-count";
 const loadTrophyCount = () => {
   const savedTrophyCount = localStorage.getItem(TROPHY_STORAGE_KEY);
 
-  trophyCount.value = savedTrophyCount;
+  trophyCount.value = Number(savedTrophyCount) || 0;
 };
 
 const incrementTrophy = () => {
