@@ -1,8 +1,16 @@
 # 🐍 Snake Game
 
-\<p align="center">   A classic recreated with Vue.js. \</p>
+<p align="center">
+  A classic recreated with Vue.js.
+</p>
 
-\<p align="center">   \<img src="[https://img.shields.io/badge/Nuxt-00DC82?style=for-the-badge&logo=nuxtdotjs&logoColor=white](https://img.shields.io/badge/Nuxt-00DC82?style=for-the-badge\&logo=nuxtdotjs\&logoColor=white)" alt="Nuxt" />   \<img src="[https://img.shields.io/badge/Vue.js-4FC08D?style=for-the-badge&logo=vuedotjs&logoColor=white](https://img.shields.io/badge/Vue.js-4FC08D?style=for-the-badge\&logo=vuedotjs\&logoColor=white)" alt="Vue.js" />   \<img src="[https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge\&logo=typescript\&logoColor=white)" alt="TypeScript" />   \<img src="[https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge\&logo=tailwindcss\&logoColor=white)" alt="Tailwind CSS" />   \<img src="[https://img.shields.io/badge/pnpm-F69220?style=for-the-badge&logo=pnpm&logoColor=white](https://img.shields.io/badge/pnpm-F69220?style=for-the-badge\&logo=pnpm\&logoColor=white)" alt="pnpm" /> \</p>
+<p align="center">
+  <img src="https://img.shields.io/badge/Nuxt-00DC82?style=for-the-badge&logo=nuxtdotjs&logoColor=white" alt="Nuxt" />
+  <img src="https://img.shields.io/badge/Vue.js-4FC08D?style=for-the-badge&logo=vuedotjs&logoColor=white" alt="Vue.js" />
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/pnpm-F69220?style=for-the-badge&logo=pnpm&logoColor=white" alt="pnpm" />
+</p>
 
 ---
 
@@ -17,7 +25,7 @@ Rather than simply reproducing the traditional gameplay, this project explores d
 <img width="1917" height="912" alt="image" src="https://github.com/user-attachments/assets/a60be238-aedb-49ec-ba3d-340a1e0a0b0c" />
 
 
-<img width="1916" height="908" alt="Gif do jogo da cobrinha" src="https://github.com/user-attachments/assets/76dd4e20-64e2-4a73-829f-61a7f2c3494a" />
+<img width="1916" height="915" alt="gif da cobrinha 2" src="https://github.com/user-attachments/assets/73c42d89-a123-4450-895b-79f2a39e6405" />
 
 
 ## ✨ Features
@@ -132,6 +140,6 @@ http://localhost:3000
 
 ---
 
-\<p align="center">   Developed with 💚 and JavaScript. \</p>
+<p align="center">   Developed with 💚 and JavaScript. </p>
 
-\<p align="center">   \<strong>Have fun and don't hit yourself! 🐍\</strong> \</p>
+<p align="center">   <strong>Have fun and don't hit yourself! 🐍</strong> </p>
