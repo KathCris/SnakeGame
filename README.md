@@ -20,6 +20,8 @@
 
 Rather than simply reproducing the traditional gameplay, this project explores different front-end development features with Nuxt.js to create a dynamic experience while revisiting development concepts related to this framework.
 
+**Documentation link:** https://app.notion.com/p/Snake-Game-40750456b2768071b348c7898d75a2d5?source=copy_link 
+
 ## 🖼️ Preview
 
 <img width="1917" height="912" alt="image" src="https://github.com/user-attachments/assets/a60be238-aedb-49ec-ba3d-340a1e0a0b0c" />
