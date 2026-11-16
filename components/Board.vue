@@ -21,6 +21,8 @@
           :segments="snakeSegments"
           :direction="direction"
           :animation-duration="speed"
+          :cols="colCount"
+          :rows="rowCount"
         />
       </div>
     </div>

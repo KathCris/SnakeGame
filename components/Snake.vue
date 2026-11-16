@@ -2,7 +2,9 @@
   <div class="absolute inset-0 pointer-events-none">
     <!-- Corpo inteiro da cobra -->
     <svg
-      class="absolute inset-0 w-full h-full"
+      class="absolute top-0 left-0"
+      :width="cols * size"
+      :height="rows * size"
       :viewBox="`0 0 ${cols * size} ${rows * size}`"
       preserveAspectRatio="none"
       style="overflow: visible; z-index: 1"
@@ -33,7 +35,7 @@
     >
       <div class="w-10 h-7 bg-blue-500 rounded-r-2xl shadow-lg relative">
         <!-- Olhos -->
-        <div class="flex flex-col items-center justify-center -mt-2.5 -ml-10">
+        <div class="flex flex-col items-center justify-center -mt-2 -ml-10">
           <div
             class="w-6 h-6 bg-gray-300 rounded-full border-4 border-blue-500 shadow-lg relative"
           >
@@ -78,6 +80,12 @@ const props = defineProps({
   animationDuration: {
     type: Number,
     default: 150,
+  },
+  cols: {
+    type: Number,
+  },
+  rows: {
+    type: Number,
   },
 });
 
